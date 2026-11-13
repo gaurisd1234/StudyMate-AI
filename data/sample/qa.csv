@@ -1,0 +1,17 @@
+question,source,page
+What does the least squares method minimize?,ml_notes.pdf,1
+How do we measure how far predictions are from the true values in a regression model?,ml_notes.pdf,1
+Why can accuracy be misleading when one class is much rarer than the others?,ml_notes.pdf,2
+Which metric combines precision and recall into one number?,ml_notes.pdf,2
+What criterion decides where a decision tree splits the data?,ml_notes.pdf,3
+How does combining many trees reduce overfitting compared to a single tree?,ml_notes.pdf,3
+Why do image models share the same small filter across the whole picture?,ml_notes.pdf,4
+What does pooling do to feature maps?,ml_notes.pdf,4
+Why do plain recurrent networks forget information from many steps ago?,ml_notes.pdf,5
+What are the three gates in an LSTM cell?,ml_notes.pdf,5
+How does a model decide which words in a sentence to focus on?,ml_notes.pdf,6
+Why are transformers faster to train than recurrent networks?,ml_notes.pdf,6
+What can I do when training accuracy is high but validation accuracy is poor?,ml_notes.pdf,7
+What does dropout do during training?,ml_notes.pdf,7
+What happens if the step size during optimization is too large?,ml_notes.pdf,8
+How is stochastic gradient descent different from using the full dataset each step?,ml_notes.pdf,8

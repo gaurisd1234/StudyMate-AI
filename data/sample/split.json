@@ -1,0 +1,75 @@
+{
+  "seed": 42,
+  "dev_ratio": 0.4,
+  "test_ratio": 0.6,
+  "total_questions": 16,
+  "dev_count": 6,
+  "test_count": 10,
+  "dev": [
+    5,
+    6,
+    7,
+    9,
+    10,
+    14
+  ],
+  "test": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    8,
+    11,
+    12,
+    13,
+    15
+  ],
+  "dev_indices": [
+    5,
+    6,
+    7,
+    9,
+    10,
+    14
+  ],
+  "test_indices": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    8,
+    11,
+    12,
+    13,
+    15
+  ],
+  "dev_questions": [
+    "How does combining many trees reduce overfitting compared to a single tree?",
+    "Why do image models share the same small filter across the whole picture?",
+    "What does pooling do to feature maps?",
+    "What are the three gates in an LSTM cell?",
+    "How does a model decide which words in a sentence to focus on?",
+    "What happens if the step size during optimization is too large?"
+  ],
+  "test_questions": [
+    "What does the least squares method minimize?",
+    "How do we measure how far predictions are from the true values in a regression model?",
+    "Why can accuracy be misleading when one class is much rarer than the others?",
+    "Which metric combines precision and recall into one number?",
+    "What criterion decides where a decision tree splits the data?",
+    "Why do plain recurrent networks forget information from many steps ago?",
+    "Why are transformers faster to train than recurrent networks?",
+    "What can I do when training accuracy is high but validation accuracy is poor?",
+    "What does dropout do during training?",
+    "How is stochastic gradient descent different from using the full dataset each step?"
+  ],
+  "stratification": {
+    "ml_notes.pdf": {
+      "total": 16,
+      "dev": 6,
+      "test": 10
+    }
+  }
+}

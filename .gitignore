@@ -1,0 +1,14 @@
+venv/
+.venv/
+__pycache__/
+*.pyc
+.env
+.cache/
+results/*
+!results/.gitkeep
+.vscode/
+.idea/
+.DS_Store
+# your private study material (add back selectively if you want to share samples)
+data/docs/*
+!data/docs/.gitkeep
