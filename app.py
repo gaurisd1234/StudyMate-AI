@@ -46,7 +46,9 @@ def load_corpus(doc_dir: str, chunk_size: int = 250, overlap_pct: int = 20) -> l
     path = Path(doc_dir)
     if not path.is_dir():
         raise FileNotFoundError(f"Document directory '{doc_dir}' does not exist.")
-    return build_chunks(path, chunk_size=chunk_size, overlap_pct=overlap_pct)
+    overlap_words = int(chunk_size * (overlap_pct / 100.0))
+    chunks, _ = build_chunks(path, chunk_size=chunk_size, overlap=overlap_words)
+    return chunks
 
 
 @st.cache_resource(show_spinner=False)
@@ -69,7 +71,7 @@ def get_reranker_retriever(
     top_n: int = 20,
 ) -> RerankRetriever:
     """Instantiate cached Cross-Encoder reranker."""
-    return RerankRetriever(_base_retriever, model_name=model_name, top_n=top_n)
+    return RerankRetriever(_base_retriever, model_name=model_name, top_k_candidates=top_n)
 
 
 def select_retriever(
