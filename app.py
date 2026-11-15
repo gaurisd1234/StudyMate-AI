@@ -21,7 +21,7 @@ sys.path.insert(0, str(ROOT / "src"))
 
 from studymate.answer import ABSTENTION_TEXT, answer_question  # noqa: E402
 from studymate.ingest import Chunk, build_chunks  # noqa: E402
-from studymate.llm import LLMClient  # noqa: E402
+from studymate.llm import FakeLLM, LLMClient  # noqa: E402
 from studymate.retrievers import (  # noqa: E402
     BM25Retriever,
     DenseRetriever,
@@ -148,9 +148,25 @@ def main() -> None:
         top_k = st.slider("Top Context Passages (k)", min_value=1, max_value=10, value=5)
 
         st.divider()
+        st.subheader("🔑 Gemini API Key")
+        api_key_env = os.getenv("GEMINI_API_KEY", "")
+        entered_key = st.text_input(
+            "API Key (optional)",
+            type="password",
+            value=api_key_env,
+            placeholder="AIzaSy...",
+            help="Get a free key at https://aistudio.google.com/. If empty, runs in FakeLLM simulation mode.",
+        )
+        if entered_key.strip():
+            os.environ["GEMINI_API_KEY"] = entered_key.strip()
+            api_key_active = True
+        else:
+            if "GEMINI_API_KEY" in os.environ and not os.environ["GEMINI_API_KEY"]:
+                del os.environ["GEMINI_API_KEY"]
+            api_key_active = bool(os.getenv("GEMINI_API_KEY"))
+
         st.subheader("ℹ️ System Status")
-        api_key_set = bool(os.getenv("GEMINI_API_KEY"))
-        if api_key_set:
+        if api_key_active:
             st.success("Gemini API: Connected", icon="🟢")
         else:
             st.info("Gemini API: Not Set (Running FakeLLM mock)", icon="🟡")
@@ -199,11 +215,23 @@ def main() -> None:
             t_total_start = time.perf_counter()
             retriever = select_retriever(retrieval_mode, chunks)
 
-            res = answer_question(query, retriever=retriever, k=int(top_k))
+            llm_client = None if api_key_active else FakeLLM()
+            try:
+                res = answer_question(query, retriever=retriever, k=int(top_k), client=llm_client)
+            except Exception as exc:
+                st.error(f"Error during answer generation: {exc}")
+                return
             total_elapsed_ms = (time.perf_counter() - t_total_start) * 1000
 
         # Display Answer Section
         st.markdown("### 📝 Answer")
+        if not api_key_active:
+            st.info(
+                "💡 **Simulation Mode**: Running without a live Gemini API key. "
+                "Answers are simulated directly from the retrieved context passages using `FakeLLM`. "
+                "To connect live Google Gemini, paste your API key in the sidebar.",
+                icon="ℹ️",
+            )
         if res.is_abstention:
             st.warning(
                 f"**System Abstention:**\n\n> *\"{res.answer}\"*\n\n"

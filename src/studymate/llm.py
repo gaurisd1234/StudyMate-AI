@@ -59,6 +59,26 @@ class FakeLLM:
         if self.default_response is not None:
             return self.default_response
 
+        # Impartial evaluation judge prompt
+        if "Answer with ONLY the number 1 or 0:" in prompt:
+            return "1"
+
+        # Answer generation prompt from context passages
+        if "Context Passages:" in prompt and "Question:" in prompt:
+            import re
+            citations = re.findall(r"Source:\s+\[([\w\.-]+\s+p\.\d+)\]", prompt)
+            passage_match = re.search(r"\[1\]\s+Source:\s+\[.*?\]\s*\n(.*?)(?=\n\n\[\d+\]|\n\nQuestion:)", prompt, re.DOTALL)
+            if citations and passage_match:
+                lines = [l.strip() for l in passage_match.group(1).splitlines() if l.strip() and not l.strip().startswith("[")]
+                body = " ".join(lines[:2]) if lines else "the mechanism is detailed in the lecture materials"
+                if len(body) > 180:
+                    body = body[:180] + "..."
+                return f"Based on the provided materials, {body} [{citations[0]}]."
+            elif citations:
+                return f"Based on the provided context, the concept is addressed in [{citations[0]}]."
+            else:
+                return "I could not find this in the provided material."
+
         # Dynamic mock generation aware of question types and passage topics
         prompt_lower = prompt.lower()
         import re
